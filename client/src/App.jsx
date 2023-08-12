@@ -74,7 +74,7 @@ function App() {
           <span className="mx-10 text-2xl">Let's Upload Image</span>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
         </div>
-        <div className="grid justify-center align-middle">
+        <div className="grid justify-center align-middle border-b-2 border-b-stone-400">
           <button
             className="rounded-full my-4  text-white bg-blue-500 p-5 duration-150	 hover:bg-orange-500 "
             onClick={imageUpload}
@@ -84,13 +84,13 @@ function App() {
           {image === null || image === "" ? (
             ""
           ) : (
-            <img className="shadow-lg shadow-indigo-500/40 p-5 rounded-lg" width={300} height={300} src={image} alt="" />
+            <img className="shadow-lg shadow-indigo-500/40 p-5 rounded-lg" width={300} height={300} src={image} loading="lazy" />
           )}
         </div>
       </div>
 
       <br />
-      <div className="grid grid-cols-4 gap-2 ">
+      <div className="grid grid-cols-4 ">
         {allData.map((data) => (
           <div className="flex justify-center" key={data._id}>
             <img width={500} src={data.image} alt="" />
