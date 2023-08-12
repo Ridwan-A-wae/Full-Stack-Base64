@@ -6,7 +6,7 @@ import imageCompression from "browser-image-compression";
 function App() {
   const [image, setImage] = useState("");
   const [allData, setAllData] = useState([]);
-  const [uploaded, setUploaded] = useState(false)
+  const [uploaded, setUploaded] = useState(false);
 
   const handleImageUpload = async (event) => {
     const imageFile = event.target.files[0];
@@ -37,15 +37,19 @@ function App() {
   };
 
   const imageUpload = async () => {
-    setUploaded(false)
-    try {
-      const res = await axios.post("http://localhost:8080/api/image/create", {
-        base64: image,
-      });
-      console.log(res.data);
-      setUploaded(true);
-    } catch (err) {
-      console.log(err);
+    setUploaded(false);
+    if (image) {
+      try {
+        const res = await axios.post("http://localhost:8080/api/image/create", {
+          base64: image,
+        });
+        console.log(res.data);
+        setUploaded(true);
+      } catch (err) {
+        console.log(err);
+      }
+    }else {
+      console.log("No image to upload")
     }
   };
 
@@ -53,7 +57,7 @@ function App() {
     try {
       const res = await axios.get("http://localhost:8080/api/image");
       setAllData(res.data.data);
-      console.log(res.data.data)
+      console.log(res.data.data);
     } catch (err) {
       console.log(err);
     }
@@ -61,28 +65,38 @@ function App() {
 
   useEffect(() => {
     fetchData();
-  }, [uploaded==true]);
+  }, [uploaded === true]);
 
   return (
-    <div className="auth-wrapper">
-      <div className="auth-inner" style={{ width: "auto" }}>
-        Let's Upload Image
-        <input type="file" accept="image/*" onChange={handleImageUpload} />
-        {image === null || image === "" ? (
-          ""
-        ) : (
-          <img width={300} height={300} src={image} alt="" />
-        )}
-      </div>
-      <br />
-      <button onClick={imageUpload}>upload Image</button>
-      <br />
-      <h1>รูปภาพทั้งหมด</h1>
-      {allData.map((data) => (
-        <div key={data._id}>
-          <img width={500} src={data.image} alt="" />
+    <div style={{border:"1px solid #cbcbcb"}} className="container mx-auto border-slate-600 border-width: 8px grid p-4">
+      <div className="text-xl">
+        <div className=" shadow-lg shadow-indigo-500/40 p-5">
+          <span className="mx-10 text-2xl">Let's Upload Image</span>
+          <input type="file" accept="image/*" onChange={handleImageUpload} />
         </div>
-      ))}
+        <div className="grid justify-center align-middle">
+          <button
+            className="rounded-full my-4  text-white bg-blue-500 p-5 duration-150	 hover:bg-orange-500 "
+            onClick={imageUpload}
+          >
+            Upload Image
+          </button>
+          {image === null || image === "" ? (
+            ""
+          ) : (
+            <img className="shadow-lg shadow-indigo-500/40 p-5 rounded-lg" width={300} height={300} src={image} alt="" />
+          )}
+        </div>
+      </div>
+
+      <br />
+      <div className="grid grid-cols-4 gap-2 ">
+        {allData.map((data) => (
+          <div className="flex justify-center" key={data._id}>
+            <img width={500} src={data.image} alt="" />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
